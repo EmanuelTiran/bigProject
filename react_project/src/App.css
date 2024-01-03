@@ -1,0 +1,9 @@
+.posts{
+  border: 1px solid black;
+  color: blueviolet;
+}
+#comment{
+  border: 1px solid blueviolet;
+  color: black;
+  font-size: 15px;
+}

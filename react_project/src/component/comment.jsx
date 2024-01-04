@@ -21,17 +21,11 @@ const Comment = ({ postId }) => {
 
     const deleteComment = async (id) => {
         try {
-            const user = localStorage.getItem('currentUser');
-            let currentUser = JSON.parse(user)
-
-            if (getUserIdFromCommentId(id) === currentUser.id_user) {
-                const response = await axios.delete(`http://localhost:5300/comment/${id}`);
-                
-                console.log(response);
-                removeCommentById(id);
-            } else {
-                alert("This comment does not belong to you!!!");
-            }
+            // const user = localStorage.getItem('currentUser');
+            // let currentUser = JSON.parse(user)
+            const response = await axios.delete(`http://localhost:5300/comment/${id}`);
+            console.log(response);
+            removeCommentById(id);
         } catch (error) {
             console.error('Error occurred during authentication:', error);
         }

@@ -40,8 +40,6 @@ const Login = () => {
         };
         localStorage.setItem("currentUser", JSON.stringify(currentUser));
         navigate('/Home');
-
-
       }
     } catch (error) {
       console.error('Error occurred during authentication:', error);

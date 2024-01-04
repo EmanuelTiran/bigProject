@@ -5,29 +5,30 @@ const { checkUserCredentials } = require("../db/loginFunction");
 
 const postRoute = express.Router();
 
-async function authenticate(req, res, next) {
-    const auth = req.headers.auth
-    if (!auth) {
-        res.status(400).send();
-        return;
-    }
-    const [username, password] = auth.split(":");
-    if (!username || !password) {
-        res.status(400).send();
-        return;
-    }
-    const user = await checkUserCredentials(username, password);
-    if (typeof user !== 'object') {
-        res.status(401).send();
-        return
-    }
-    req.user = user;
-    next();
-}
+// async function authenticate(req, res, next) {
+//     const auth = req.headers.auth
+//     if(!auth){
+//         res.status(400).send();
+//         return;
+//     }
+//     const [username, password] = auth.split(":");
+//     if(!username || !password) {
+//         res.status(400).send();
+//         return;
+//     }
+//     const user = await checkUserCredentials(username, password);
+//     console.log(typeof user !== 'object');
+//     if(typeof user !== 'object'){
+//         res.status(401).send();
+//         return
+//     }
+//     req.user = user;
+//     next();
+// }
 
-postRoute.get("/", authenticate, async (req, res) => {
+postRoute.get("/", async (req, res) => {
     try {
-        console.log(req.user);
+        // console.log("try");
         const posts = await get.post();
         // console.log(posts);
         res.json(posts);
@@ -81,7 +82,4 @@ postRoute.delete("/:id", async (req, res) => {
         res.status(500).send();
     }
 });
-module.exports = {
-    postRoute: postRoute,
-    authenticate: authenticate
-};
+module.exports = postRoute;

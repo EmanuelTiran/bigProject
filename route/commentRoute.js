@@ -23,10 +23,6 @@ commentRoute.get("/:postId", async (req, res) => {
         let postId = req.params.postId;
         const comments = await get.comments(parseInt(postId));
         console.log(comments);
-        // if (comments.length === 0) {
-        //     res.status(404).send("not found");
-        //     return;
-        // }
         // console.log("try get comment route");
         // console.log(comments);
         res.json(comments);

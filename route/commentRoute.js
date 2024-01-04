@@ -4,22 +4,41 @@ const { get, erase, add } = require("../db/generyFunction");
 
 const commentRoute = express.Router();
 
+commentRoute.get("/userIdFromComment", async (req, res) => {
+    try {
+        let  comment_id  = req.body.comment_id;
+        const userId = await get.userIdFromComment(comment_id);
+        console.log("try get userId route");
+        console.log(userId);
+        res.json(userId);
+    } catch (error) {
+        console.log("catch of userIdFromComment");
+        console.log(error);
+        res.status(500).send();
+    }
+});
+
 commentRoute.get("/:postId", async (req, res) => {
     try {
         let postId = req.params.postId;
         const comments = await get.comments(parseInt(postId));
-        console.log("try get comment route");
         console.log(comments);
+        // if (comments.length === 0) {
+        //     res.status(404).send("not found");
+        //     return;
+        // }
+        // console.log("try get comment route");
+        // console.log(comments);
         res.json(comments);
     } catch (error) {
-        console.log("catch");
-        console.log(error);
+        // console.log("catch");
+        // console.log(error);
         res.status(500).send();
     }
 });
 commentRoute.get("/", async (req, res) => {
     try {
-        const comment = await get.comment();
+        const comment = await get.lastComment();
         console.log("try get comment route");
         console.log(comment);
         res.json(comment);

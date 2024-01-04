@@ -1,7 +1,7 @@
 const {get,add,erase,edit} = require('../bigProject/db/generyFunction');
 const express = require("express");
 const usersRoute = require("../bigProject/route/usersRoute");
-const postRoute = require("../bigProject/route/postRoute");
+const {postRoute,authenticate} = require("../bigProject/route/postRoute");
 const todosRoute = require("../bigProject/route/todosRoute");
 const loginRoute = require("./route/loginRuote");
 const commentRoute = require("../bigProject/route/commentRoute");
@@ -11,6 +11,7 @@ app.use(cors());
 
 app.use(express.json());
 app.use("/api", loginRoute);
+// app.use(authenticate())
 app.use("/api/users", usersRoute);
 app.use("/api/user/post", postRoute);
 app.use("/api/user/todos", todosRoute);

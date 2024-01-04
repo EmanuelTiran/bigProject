@@ -39,12 +39,12 @@ async function updateTodos(id) {
 }
 
 async function getComments(id) {
-    console.log(id);
+    // console.log(id);
     const SQL = `
 SELECT * FROM pepole_schema.comment WHERE post_id = ?;
 `;
-    const [data] = await pool.query(SQL,[id]);
-    console.log(data);
+    const [data] = await pool.query(SQL, [id]);
+    // console.log(data);
     return data;
 }
 
@@ -53,17 +53,16 @@ async function getComment() {
     SELECT * FROM comment ORDER BY id_comment DESC LIMIT 1;
 `;
     const [data] = await pool.query(SQL);
-    // console.log(data[0]);
+    console.log(data[0]);
     return data[0];
 }
-getComment()
-
+// getComment();
 async function getPost() {
     const SQL = `
     SELECT * FROM post;
     `;
     const [data] = await pool.query(SQL);
-    console.log(data);
+    // console.log(data);
     return data;
 }
 
@@ -160,14 +159,36 @@ async function addPost(userId, title, content) {
     }
 }
 
+async function getUserIdFromCommentId(commentId) {
+    try {
+        // קביעת שאילתה לקבלת postId מטבלת comment על פי ה commentId
+        const [comments] = await pool.query('SELECT post_id FROM comment WHERE id_comment = ?', [commentId]);
+        const postId = comments[0];
+        console.log(postId);
+        // קביעת שאילתה לקבלת userId מטבלת post על פי ה postId שקיבלנו מהטבלה של התגובות
+        const [posts] = await pool.query('SELECT userId FROM post WHERE id_post = ?', [postId.post_id]);
+        const userId = posts[0];
+
+        // כאן אתה יכול להשתמש במשתנה userId למטרות שונות או להחזיר אותו מהפונקציה
+        console.log(userId.userId);
+        return userId;
+    } catch (error) {
+        console.error('Error executing query:', error);
+        throw error;
+    }
+}
+getUserIdFromCommentId(4);
+
+
 module.exports = {
     get: {
         users: getUsers,
         user: getUser,
         comments: getComments,
-        comment: getComment,
+        lastComment: getComment,
         post: getPost,
         todos: getTodos,
+        userIdFromComment: getUserIdFromCommentId
     },
     add: {
         user: addUsers,
@@ -187,4 +208,5 @@ module.exports = {
         comment: updateComment,
         todos: updateTodos,
     }
+
 }

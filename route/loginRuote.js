@@ -16,10 +16,9 @@ loginRoute.post("/", (req, res) => {
             }
             if(result === "Invalid user code") {
                 res.status(400).send(result);
-                return;
+                 
             }
             res.json(result)
-            
         })
         .catch(error => {
             console.error(error);

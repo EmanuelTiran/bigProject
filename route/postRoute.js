@@ -1,17 +1,38 @@
 const express = require("express");
 // const Joi = require("joi");
 const { get, add, erase, edit } = require("../db/generyFunction");
+const { checkUserCredentials } = require("../db/loginFunction");
 
 const postRoute = express.Router();
 
-postRoute.get("/", async (req, res) => {
+async function authenticate(req, res, next) {
+    const auth = req.headers.auth
+    if (!auth) {
+        res.status(400).send();
+        return;
+    }
+    const [username, password] = auth.split(":");
+    if (!username || !password) {
+        res.status(400).send();
+        return;
+    }
+    const user = await checkUserCredentials(username, password);
+    if (typeof user !== 'object') {
+        res.status(401).send();
+        return
+    }
+    req.user = user;
+    next();
+}
+
+postRoute.get("/", authenticate, async (req, res) => {
     try {
-        console.log("try");
+        console.log(req.user);
         const posts = await get.post();
-        console.log(posts);
+        // console.log(posts);
         res.json(posts);
     } catch (error) {
-        console.log("catch");
+        // console.log("catch");
         console.log(error);
         res.status(500).send();
     }
@@ -60,4 +81,7 @@ postRoute.delete("/:id", async (req, res) => {
         res.status(500).send();
     }
 });
-module.exports = postRoute;
+module.exports = {
+    postRoute: postRoute,
+    authenticate: authenticate
+};

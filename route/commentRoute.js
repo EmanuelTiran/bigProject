@@ -73,17 +73,4 @@ commentRoute.post("/", async (req, res) => {
     }
 });
 
-commentRoute.put("/:id", async (req, res) => {
-    try {
-        const todos = await edit.todos(req.params.id);
-        if (todos) {
-            res.json(todos);
-            return;
-        }
-        res.status(404).send();
-    } catch (error) {
-        res.status(500).send();
-    }
-}
-);
 module.exports = commentRoute;
